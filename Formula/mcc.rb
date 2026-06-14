@@ -46,8 +46,12 @@ class Mcc < Formula
     # (which rejects a prebuilt wheel) and would extract this platform wheel
     # rather than install it. The venv is --system-site-packages, so its
     # python can import pip; the wheel is a local file, so no network is used.
+    # Copy to the canonical wheel filename first — Homebrew's cache prefixes a
+    # checksum (<sha>--…) that breaks pip's strict wheel-name parsing.
+    wheel = buildpath/File.basename(resource("llvmlite").url)
+    cp resource("llvmlite").cached_download, wheel
     system libexec/"bin/python", "-m", "pip", "install", "--no-deps",
-           "--no-index", resource("llvmlite").cached_download
+           "--no-index", wheel
 
     # Install mcc itself and link the `mcc` script into bin. Homebrew passes
     # --no-deps here, so the already-present llvmlite satisfies the dependency
