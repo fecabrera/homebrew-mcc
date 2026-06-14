@@ -41,14 +41,17 @@ class Mcc < Formula
   def install
     venv = virtualenv_create(libexec, "python3.14")
 
-    # Install the pre-fetched llvmlite wheel straight from Homebrew's download
-    # cache (the build sandbox has no network, so pip can't reach PyPI).
-    system libexec/"bin/pip", "install", "--no-deps", "--no-index",
-           resource("llvmlite").cached_download
+    # Install the pre-fetched llvmlite wheel with the venv's own python. We
+    # can't route it through venv.pip_install: that passes --no-binary=:all:
+    # (which rejects a prebuilt wheel) and would extract this platform wheel
+    # rather than install it. The venv is --system-site-packages, so its
+    # python can import pip; the wheel is a local file, so no network is used.
+    system libexec/"bin/python", "-m", "pip", "install", "--no-deps",
+           "--no-index", resource("llvmlite").cached_download
 
-    # Install mcc itself and link the `mcc` script into bin. Homebrew's
-    # pip_install_and_link passes --no-deps, so the already-present llvmlite
-    # satisfies the dependency without touching the network.
+    # Install mcc itself and link the `mcc` script into bin. Homebrew passes
+    # --no-deps here, so the already-present llvmlite satisfies the dependency
+    # without touching the (unavailable) network.
     venv.pip_install_and_link buildpath
   end
 
