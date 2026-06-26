@@ -3,8 +3,8 @@ class Mcc < Formula
 
   desc "Small, modern-C-style language compiled to native code via LLVM"
   homepage "https://github.com/fecabrera/mcc"
-  url "https://github.com/fecabrera/mcc/archive/refs/tags/v0.1.2.tar.gz"
-  sha256 "6fe85131bb7aa1c2e429af3430b7bec6bfec04967cf813a25b9d11a16a58e1e8"
+  url "https://github.com/fecabrera/mcc/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "e984edbb020828f5dd2cc0dac1e39753f4cb752688194b083354f4252157a73b"
   license "BSD-3-Clause"
 
   depends_on "python@3.14"
